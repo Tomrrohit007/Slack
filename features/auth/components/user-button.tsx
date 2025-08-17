@@ -17,6 +17,7 @@ export const UserButton = () => {
   if (isLoading) {
     return <Loader className="size-4 animate-spin text-muted-foreground " />;
   }
+
   if (!data) return null;
 
   const { name, image } = data;

@@ -51,7 +51,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
       <CardHeader className="px-0 pt-0">
         <CardTitle>Login to continue</CardTitle>{" "}
         <CardDescription>
-          Use your email or another service to continue
+          your email or another service to continue
         </CardDescription>
       </CardHeader>
       {!!error && (
