@@ -1,14 +1,11 @@
 import { v } from 'convex/values';
-import { query, QueryCtx } from './_generated/server';
+import { mutation, query } from './_generated/server';
 import { auth } from './auth';
-import { Id } from './_generated/dataModel';
-
-const populateUser = (ctx: QueryCtx, id: Id<'users'>) => {
-  return ctx.db.get(id);
-};
 
 export const get = query({
-  args: { workspaceId: v.id('workspaces') },
+  args: {
+    workspaceId: v.id('workspaces'),
+  },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
 
@@ -23,29 +20,26 @@ export const get = query({
 
     if (!member) return [];
 
-    const data = await ctx.db
-      .query('members')
+    const channels = await ctx.db
+      .query('channels')
       .withIndex('by_workspace_id', (q) =>
         q.eq('workspaceId', args.workspaceId)
       )
       .collect();
 
-    const members = [];
-
-    for (const member of data) {
-      const user = await populateUser(ctx, member.userId);
-      if (user) members.push({ ...member, user });
-    }
-    return members;
+    return channels;
   },
 });
 
-export const current = query({
-  args: { workspaceId: v.id('workspaces') },
+export const create = mutation({
+  args: {
+    name: v.string(),
+    workspaceId: v.id('workspaces'),
+  },
   handler: async (ctx, args) => {
     const userId = await auth.getUserId(ctx);
 
-    if (!userId) return null;
+    if (!userId) throw Error('Unauthorized');
 
     const member = await ctx.db
       .query('members')
@@ -54,8 +48,14 @@ export const current = query({
       )
       .unique();
 
-    if (!member) return null;
+    if (!member || member.role !== 'admin') throw Error('Unauthorized');
+    const parsedName = args.name.replace(/\s+/g, '-').toLowerCase();
 
-    return member;
+    const channelId = await ctx.db.insert('channels', {
+      name: parsedName,
+      workspaceId: args.workspaceId,
+    });
+
+    return channelId;
   },
 });
