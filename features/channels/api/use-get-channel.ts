@@ -2,12 +2,14 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 
-type UseGetChannelsProps = {
-  workspaceId: Id<"workspaces">;
+type UseGetChannelProps = {
+  id: Id<"channels">;
 };
 
-export function useGetChannels({ workspaceId }: UseGetChannelsProps) {
-  const data = useQuery(api.channels.get, { workspaceId });
+export function useGetChannel({ id }: UseGetChannelProps) {
+  const data = useQuery(api.channels.getById, { id });
+
   const isLoading = data === undefined;
+
   return { data, isLoading };
 }
