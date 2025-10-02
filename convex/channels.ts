@@ -1,13 +1,13 @@
+import { getAuthUserId } from "@convex-dev/auth/server";
 import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
-import { auth } from "./auth";
 
 export const get = query({
   args: {
     workspaceId: v.id("workspaces"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
 
     if (!userId) return [];
 
@@ -37,7 +37,7 @@ export const create = mutation({
     workspaceId: v.id("workspaces"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
 
     if (!userId) throw Error("Unauthorized");
 
@@ -66,7 +66,7 @@ export const update = mutation({
     name: v.string(),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
 
     if (!userId) throw Error("Unauthorized");
 
@@ -95,7 +95,7 @@ export const remove = mutation({
     id: v.id("channels"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
 
     if (!userId) throw Error("Unauthorized");
 
@@ -124,7 +124,7 @@ export const getById = query({
     id: v.id("channels"),
   },
   handler: async (ctx, args) => {
-    const userId = await auth.getUserId(ctx);
+    const userId = await getAuthUserId(ctx);
     if (!userId) return null;
 
     const channel = await ctx.db.get(args.id);
