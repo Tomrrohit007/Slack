@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 import { Sidebar } from "@/components/sidebar/sidebar";
 import { Toolbar } from "@/components/toolbar";
 import {
@@ -8,13 +8,15 @@ import {
   ResizableHandle,
 } from "@/components/ui/resizable";
 import { WorkspaceSidebar } from "@/components/workspace/workspace-sidebar";
-import React from "react";
+import { usePanel } from "@/hooks/use-panel";
 
 export default function WorkspaceLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const { parentMessageId, onCloseMessage } = usePanel();
+  const showPanel = !!parentMessageId;
   return (
     <div className="h-full">
       <Toolbar />
@@ -33,6 +35,14 @@ export default function WorkspaceLayout({
           </ResizablePanel>
           <ResizableHandle withHandle />
           <ResizablePanel minSize={20}>{children}</ResizablePanel>
+          {showPanel && (
+            <>
+              <ResizableHandle withHandle />
+              <ResizablePanel minSize={20} defaultSize={29}>
+                Load thread
+              </ResizablePanel>
+            </>
+          )}
         </ResizablePanelGroup>
       </div>
     </div>

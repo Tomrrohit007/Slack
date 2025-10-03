@@ -12,13 +12,13 @@ import { useState, ReactElement } from "react";
 export const useConfirm = (
   title: string,
   message: string,
-): [() => ReactElement, () => Promise<unknown>] => {
+): [() => ReactElement, () => Promise<boolean>] => {
   const [promise, setPromise] = useState<{
     resolve: (value: boolean) => void;
   } | null>(null);
 
   const confirm = () =>
-    new Promise((resolve, reject) => {
+    new Promise<boolean>((resolve) => {
       setPromise({ resolve });
     });
 
@@ -35,7 +35,7 @@ export const useConfirm = (
   };
 
   const ConfirmDialog = () => (
-    <Dialog open={promise !== null}>
+    <Dialog open={promise !== null} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
@@ -50,5 +50,6 @@ export const useConfirm = (
       </DialogContent>
     </Dialog>
   );
+
   return [ConfirmDialog, confirm];
 };
