@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 import { useCurrentMember } from "@/features/members/auth/use-current-member";
 import { Loader } from "lucide-react";
+import { ConversationHero } from "./conversation-hero";
 
 const TIME_THREESHOLD = 5;
 
@@ -134,6 +135,9 @@ export const MessageList = ({
       )}
       {variant === "channel" && channelName && channelCreationTime && (
         <ChannelHero creationTime={channelCreationTime} name={channelName} />
+      )}{" "}
+      {variant === "conversation" && (
+        <ConversationHero name={memberName} image={memberImage} />
       )}
     </div>
   );

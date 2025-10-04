@@ -5,25 +5,28 @@ import { toast } from "sonner";
 import { Id } from "@/convex/_generated/dataModel";
 import { useCreateMessage } from "@/features/messages/api/use-create-message";
 import { useGenerateUploadUrl } from "@/features/upload/api/use-generate-upload-url";
-import { useChannelId } from "@/hooks/use-channel-id";
 import { useWorkspaceId } from "@/hooks/use-workspace-id";
 
 const Editor = dynamic(() => import("@/components/channel/editor"), {
   ssr: false,
 });
 
+type ChatInputProps = {
+  placeholder: string;
+  conversationId: Id<"conversations">;
+};
+
 type SubmitValuesProps = {
-  channelId: Id<"channels">;
+  conversationId: Id<"conversations">;
   workspaceId: Id<"workspaces">;
   body: string;
   image: Id<"_storage"> | undefined;
 };
 
-export const ChatInput = ({ placeholder }: { placeholder: string }) => {
+export const ChatInput = ({ placeholder, conversationId }: ChatInputProps) => {
   const [editorKey, setEditorKey] = useState(0);
   const [isPending, setIsPending] = useState(false);
   const editorRef = useRef<Quill | null>(null);
-  const channelId = useChannelId();
   const workspaceId = useWorkspaceId();
 
   const { mutate: createMessage } = useCreateMessage();
@@ -41,7 +44,7 @@ export const ChatInput = ({ placeholder }: { placeholder: string }) => {
       setIsPending(true);
 
       const values: SubmitValuesProps = {
-        channelId,
+        conversationId,
         workspaceId,
         body,
         image: undefined,

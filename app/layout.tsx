@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 
 import { ConvexClientProvider } from "@/components/convex-client-provider";
@@ -26,7 +27,7 @@ export default function RootLayout({
             <JotaiProvider>
               <Toaster />
               <Modals />
-              {children}
+              <NuqsAdapter>{children}</NuqsAdapter>{" "}
             </JotaiProvider>
           </ConvexClientProvider>
         </body>
