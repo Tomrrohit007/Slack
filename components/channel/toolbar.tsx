@@ -2,7 +2,6 @@ import { MessageSquareTextIcon, Pencil, Smile, Trash } from "lucide-react";
 import { Button } from "../ui/button";
 import { Hint } from "../workspace/hint";
 import { EmojiPopover } from "../emoji-popover";
-
 type ToolbarProps = {
   isAuthor: boolean;
   isPending: boolean;

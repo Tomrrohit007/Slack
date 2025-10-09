@@ -17,6 +17,7 @@ import UserItem from "./user-item";
 import { useCreateChannelModal } from "@/features/channels/store/use-create-channel-modal";
 import { useChannelId } from "@/hooks/use-channel-id";
 import { useMemberId } from "@/hooks/use-member-id";
+import SidebarNotItem from "./sidebar-item-not";
 
 export function WorkspaceSidebar() {
   const workspaceId = useWorkspaceId();
@@ -64,8 +65,8 @@ export function WorkspaceSidebar() {
         isAdmin={member.role === "admin"}
       />
       <div className="flex flex-col px-2 mt-3">
-        <SidebarItem label="Threads" icon={MessageSquareText} id="threads" />
-        <SidebarItem label="Drafts & Sent" icon={SendHorizonal} id="drafts" />
+        <SidebarNotItem label="Threads" icon={MessageSquareText} />
+        <SidebarNotItem label="Drafts & Sent" icon={SendHorizonal} />
       </div>
 
       <WorkspaceSection

@@ -14,7 +14,7 @@ export const ConversationHero = ({
       <div className="flex items-center gap-x-1 mb-2">
         <Avatar className="size-14 mr-2">
           <AvatarImage src={image} />
-          <AvatarFallback>{avatarFallback}</AvatarFallback>
+          <AvatarFallback>{avatarFallback.toLocaleUpperCase()}</AvatarFallback>
         </Avatar>
         <p className="text-2xl font-bold mb-2">{name}</p>
       </div>

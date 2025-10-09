@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { useToggleReaction } from "@/features/reactions/use-toggle-reaction";
 import { Reactions } from "./reactions";
 import { usePanel } from "@/hooks/use-panel";
+import { ThreadBar } from "./thread-bar";
 
 const Renderer = dynamic(() => import("./rendered"), { ssr: false });
 
@@ -41,6 +42,7 @@ type MessageProps = {
   isCompact?: boolean;
   hideThreadButton: boolean;
   threadCount?: number;
+  threadName?: string;
   threadImage?: string;
   threadTimestamp?: number;
 };
@@ -63,6 +65,7 @@ export const Message = ({
   isCompact,
   setEditingId,
   hideThreadButton,
+  threadName,
   threadCount,
   threadImage,
   threadTimestamp,
@@ -72,7 +75,8 @@ export const Message = ({
     "Are you sure you want to delete this message? This cannot be undone.",
   );
 
-  const { onOpenMessage, onCloseMessage, parentMessageId } = usePanel();
+  const { onOpenMessage, onOpenProfile, onCloseMessage, parentMessageId } =
+    usePanel();
 
   const { mutate: updateMessage, isPending: isUpdatingMessage } =
     useUpdateMessage();
@@ -81,7 +85,7 @@ export const Message = ({
   const { mutate: toggleReaction, isPending: isTogglingReaction } =
     useToggleReaction();
 
-  const isPending = isUpdatingMessage;
+  const isPending = isUpdatingMessage || isTogglingReaction;
 
   const handleDelete = async () => {
     const ok = await confirm();
@@ -164,6 +168,13 @@ export const Message = ({
                 <span className="text-xs text-muted-foreground">(edited)</span>
               ) : null}
               <Reactions data={reactions} onChange={handleReaction} />
+              <ThreadBar
+                name={threadName}
+                count={threadCount}
+                image={threadImage}
+                timestamp={threadTimestamp}
+                onClick={() => onOpenMessage(id)}
+              />
             </div>
           )}
         </div>
@@ -193,11 +204,11 @@ export const Message = ({
     >
       <ConfirmDialog />
       <div className="flex items-start gap-2">
-        <button>
+        <button onClick={() => onOpenProfile(memberId)}>
           <Avatar className="rounded-full">
             <AvatarImage src={authorImage} />
             <AvatarFallback className="bg-gray-500 text-white">
-              {avatarFallback}
+              {avatarFallback.toLocaleUpperCase()}
             </AvatarFallback>
           </Avatar>
         </button>
@@ -216,7 +227,7 @@ export const Message = ({
             <div className="text-sm">
               <button
                 className="font-bold text-primary hover:underline"
-                onClick={() => {}}
+                onClick={() => onOpenProfile(memberId)}
               >
                 {authorName}
               </button>
@@ -233,6 +244,13 @@ export const Message = ({
               <span className="text-xs text-muted-foreground">(edited)</span>
             ) : null}
             <Reactions data={reactions} onChange={handleReaction} />
+            <ThreadBar
+              name={threadName}
+              count={threadCount}
+              image={threadImage}
+              timestamp={threadTimestamp}
+              onClick={() => onOpenMessage(id)}
+            />
           </div>
         )}
       </div>

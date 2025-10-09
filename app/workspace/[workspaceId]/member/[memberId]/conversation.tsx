@@ -6,6 +6,7 @@ import { useMemberId } from "@/hooks/use-member-id";
 import { Loader } from "lucide-react";
 import { ChatInput } from "./chat-input";
 import { MessageList } from "@/components/message-list";
+import { usePanel } from "@/hooks/use-panel";
 
 type ConversationProps = {
   id: Id<"conversations">;
@@ -13,6 +14,7 @@ type ConversationProps = {
 
 export const Conversation = ({ id }: ConversationProps) => {
   const memberId = useMemberId();
+  const { onOpenProfile } = usePanel();
 
   const { data: member, isLoading: memberLoading } = useGetMember({
     id: memberId,
@@ -32,7 +34,7 @@ export const Conversation = ({ id }: ConversationProps) => {
       <Header
         memberName={member?.user?.name}
         memberImage={member?.user?.image}
-        onClick={() => {}}
+        onClick={() => onOpenProfile(memberId)}
       />
       <MessageList
         variant="conversation"
