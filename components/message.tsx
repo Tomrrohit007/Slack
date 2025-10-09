@@ -144,11 +144,6 @@ export const Message = ({
       >
         <ConfirmDialog />
         <div className="gap-2">
-          {/*          <Hint label={formatFullTime(new Date(createdAt || Date.now()))}> */}
-          {/*   <button className="text-xs text-muted-foreground opacity-0 group-hover:opacity-100 w-[40px] text-center hover:underline leading-[22px]"> */}
-          {/*     {format(new Date(createdAt || Date.now()), "hh:mm")} */}
-          {/*   </button> */}
-          {/* </Hint> */}
           {editingId === id ? (
             <div>
               <Editor
