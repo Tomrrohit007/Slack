@@ -168,11 +168,6 @@ export const getInfoById = query({
       )
       .unique();
 
-    const allMembers = await ctx.db
-      .query("members")
-      .withIndex("by_workspace_id", (q) => q.eq("workspaceId", args.id))
-      .collect();
-
     const workspace = await ctx.db.get(args.id);
 
     return {

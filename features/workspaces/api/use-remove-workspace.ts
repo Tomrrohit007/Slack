@@ -1,46 +1,51 @@
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useMutation } from "convex/react";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 
-type RequestType = { id: Id<"workspaces"> };
-type ResponseType = Id<"workspaces"> | null;
+type RequestT = {
+  id: Id<"workspaces">;
+};
+type ResponseT = Id<"workspaces"> | null;
 
 type Options = {
-  onSuccess?: (data: ResponseType) => void;
-  onError?: (error: Error) => void;
+  onSuccess?: (data: ResponseT) => void;
+  onError?: (e: Error) => void;
   onSettled?: () => void;
   throwError?: boolean;
 };
 
 export const useRemoveWorkspace = () => {
-  const [data, setData] = useState<ResponseType>(null);
+  const [data, setData] = useState<ResponseT>(null);
   const [error, setError] = useState<Error | null>(null);
   const [status, setStatus] = useState<
     "success" | "error" | "settled" | "pending" | null
   >(null);
 
-  const isPending = useMemo(() => status === "pending", [status]);
-  const isSuccess = useMemo(() => status === "success", [status]);
-  const isError = useMemo(() => status === "error", [status]);
-  const isSettled = useMemo(() => status === "settled", [status]);
+  const isSuccess = status === "success";
+  const isError = status === "error";
+  const isSettled = status === "settled";
+  const isPending = status === "pending";
+
   const mutation = useMutation(api.workspaces.remove);
 
   const mutate = useCallback(
-    async (values: any, options?: Options) => {
+    async (values: RequestT, options?: Options) => {
+      setData(null);
+      setError(null);
+      setStatus("pending");
       try {
-        setData(null);
-        setError(null);
-        setStatus("pending");
-
         const response = await mutation(values);
+        setData(response);
+        setStatus("success");
         options?.onSuccess?.(response);
         return response;
-      } catch (error) {
+      } catch (e) {
+        setError(e as Error);
         setStatus("error");
-        options?.onError?.(error as Error);
+        options?.onError?.(e as Error);
         if (options?.throwError) {
-          throw error;
+          throw e;
         }
       } finally {
         setStatus("settled");
@@ -49,5 +54,6 @@ export const useRemoveWorkspace = () => {
     },
     [mutation],
   );
-  return { mutate, data, error, isPending, isError, isSuccess, isSettled };
+
+  return { mutate, data, error, isPending, isSuccess, isError, isSettled };
 };
