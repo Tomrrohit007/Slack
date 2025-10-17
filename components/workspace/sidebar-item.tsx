@@ -1,7 +1,6 @@
 import { LucideIcon } from 'lucide-react';
 import { IconType } from 'react-icons/lib';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useWorkspaceId } from '@/hooks/use-workspace-id';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
@@ -23,23 +22,25 @@ const sidebarItemVariants = cva(
 
 type SidebarItemProps = {
   label: string;
-  id: string;
   icon: LucideIcon | IconType;
   variant?: VariantProps<typeof sidebarItemVariants>['variant'];
+  onClick: () => void;
 };
 
-const SidebarItem = ({ label, id, icon: Icon, variant }: SidebarItemProps) => {
-  const workspaceId = useWorkspaceId();
+const SidebarItem = ({
+  label,
+  icon: Icon,
+  variant,
+  onClick,
+}: SidebarItemProps) => {
   return (
     <Button
       variant='transparent'
       size='sm'
-      asChild
-      className={cn("mt-1", sidebarItemVariants({ variant }))}>
-      <Link href={`/workspace/${workspaceId}/channel/${id}`}>
-        <Icon className='size-3.5 mr-1 shrink-0' />
-        <span className='text-sm truncate'>{label}</span>
-      </Link>
+      className={cn('mt-1', sidebarItemVariants({ variant }))}
+      onClick={onClick}>
+      <Icon className='size-3.5 mr-1 shrink-0' />
+      <span className='text-sm truncate'>{label}</span>
     </Button>
   );
 };
