@@ -60,7 +60,7 @@ Open http://localhost:3000
   Short preview clip (first 40s) showing app interaction:
 
   <video controls width="720">
-    <source src="/screenshots/preview.webm" type="video/webm">
+    <source src="https://res.cloudinary.com/dp0c5nive/video/upload/v1760127810/Screencast_20251011_010605_lupfke.webm" type="video/webm">
     Your browser does not support the video tag. You can download the preview here:
     [preview.webm](/screenshots/preview.webm)
   </video>
