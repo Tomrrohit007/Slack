@@ -55,16 +55,6 @@ Open http://localhost:3000
   - `features/messages` contains hooks and optimistic message helpers
   - `features/ui/store/navigation-pending.ts` - atom to show global navigation pending state
 
-  ## Demo preview
-
-  Short preview clip (first 40s) showing app interaction:
-
-  <video controls width="720">
-    <source src="https://res.cloudinary.com/dp0c5nive/video/upload/v1760127810/Screencast_20251011_010605_lupfke.webm" type="video/webm">
-    Your browser does not support the video tag. You can download the preview here:
-    [preview.webm](/screenshots/preview.webm)
-  </video>
-
 ## Optimistic UI
 
 The project uses optimistic UI in multiple places:
